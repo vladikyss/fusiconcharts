@@ -1,11 +1,11 @@
 import React, {useState} from "react";
 import {
-    BrowserRouter as Router,
     Switch,
     Route,
     Link
 } from "react-router-dom";
-
+import {Router} from 'react-router';
+import {createBrowserHistory} from 'history';
 import ReactDOM from "react-dom";
 
 import ReactFC from "react-fusioncharts";
@@ -21,8 +21,9 @@ import {dataSourceProps} from "./data";
 
 ReactFC.fcRoot(FusionCharts, charts, maps, usa);
 
+const browserHistory = createBrowserHistory();
+
 const Chart = ({handler}) => {
-    const [id, setId] = useState(null);
     const chartProps = {
         type: "USA",
         width: "600",
@@ -31,18 +32,11 @@ const Chart = ({handler}) => {
         containerBackgroundOpacity: Number(true),
         dataEmptyMessage: "There is no data available.",
         events: {
-            dataPlotClick: (e) => {
-                console.log(e)
-            },
-            dataPlotRollOver: (e) => {
-                console.log(e)
-            },
             entityClick: (e) => {
-                setId(e.eventId);
                 handler(e.eventId);
+                browserHistory.push('/users/' + e.eventId);
             },
             entityRollOver: (e) => {
-
             },
             chartMouseMove: (e) => {
             }
@@ -52,18 +46,17 @@ const Chart = ({handler}) => {
             ...dataSourceProps
         }
     };
-    return (<Link to={`/users/${id}`}><ReactFC {...chartProps} /></Link>);
+    return <ReactFC {...chartProps} />;
 };
 
 const App = () => {
-    const [comm, setComm] = useState(null);
+    const [comm, setComm] = useState(1);
 
     const handler = num => {
         setComm(num);
     };
-
     return (
-        <Router>
+        <Router history={browserHistory}>
             <nav>
                 <ul>
                     <li>
@@ -73,16 +66,10 @@ const App = () => {
                     </li>
                 </ul>
             </nav>
+
             <Switch>
-
                 <Route path='/users/:id'>
-                    {
-                       'Commitments: ' + comm
-                    }
-
-                </Route>
-                <Route path='/users'>
-                    <Chart/>
+                    Commitments:{comm}
                 </Route>
                 <Route exact path='/'>
                     <Chart handler={handler}/>
