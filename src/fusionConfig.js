@@ -1,5 +1,6 @@
 
 export const defaultChartConfig = {
+    animation: 0,
     alternateHGridAlpha: 100,
     alternateHGridColor: "#f7f8fa",
     baseFont: "PitchBookFont",
