@@ -21,7 +21,7 @@ import {dataSourceProps} from "./data";
 
 ReactFC.fcRoot(FusionCharts, charts, maps, usa);
 
-const Chart = ({clickChart, handler}) => {
+const Chart = ({handler}) => {
     const [id, setId] = useState(null);
     const chartProps = {
         type: "USA",
@@ -39,8 +39,7 @@ const Chart = ({clickChart, handler}) => {
             },
             entityClick: (e) => {
                 setId(e.eventId);
-                handler(e.eventId)
-                clickChart();
+                handler(e.eventId);
             },
             entityRollOver: (e) => {
 
@@ -57,50 +56,19 @@ const Chart = ({clickChart, handler}) => {
 };
 
 const App = () => {
-    const [loading, setLoading] = useState(true);
     const [comm, setComm] = useState(null);
-
-    const clickChart = () => {
-        setTimeout(()=> {
-            setLoading(false);
-        }, 200);
-    };
-
-    const resetChartLoading = () => {
-        setLoading(true)
-    };
 
     const handler = num => {
         setComm(num);
     };
 
-    return (
-        <Router>
-            <nav>
-                <ul>
-                    <li>
-                        <Link to="/">
-                            <div onClick={resetChartLoading}>Home</div>
-                        </Link>
-                    </li>
-                </ul>
-            </nav>
-            <Switch>
+    return (<>
+            {
+                'Commitments: ' + comm
+            }
+            <Chart handler={handler}/>
+        </>
 
-                <Route path='/users/:id'>
-                    {
-                        loading? 'Loading...' : 'Commitments: ' + comm
-                    }
-
-                </Route>
-                <Route path='/users'>
-                    <Chart/>
-                </Route>
-                <Route exact path='/'>
-                    <Chart clickChart={clickChart} handler={handler}/>
-                </Route>
-            </Switch>
-        </Router>
     );
 };
 
