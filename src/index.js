@@ -28,7 +28,7 @@ const Chart = ({handler}) => {
         width: "600",
         height: "400",
         dataFormat: "json",
-        containerBackgroundOpacity: Number(!false),
+        containerBackgroundOpacity: Number(true),
         dataEmptyMessage: "There is no data available.",
         events: {
             dataPlotClick: (e) => {
@@ -62,13 +62,33 @@ const App = () => {
         setComm(num);
     };
 
-    return (<>
-            {
-                'Commitments: ' + comm
-            }
-            <Chart handler={handler}/>
-        </>
+    return (
+        <Router>
+            <nav>
+                <ul>
+                    <li>
+                        <Link to="/">
+                            Home
+                        </Link>
+                    </li>
+                </ul>
+            </nav>
+            <Switch>
 
+                <Route path='/users/:id'>
+                    {
+                       'Commitments: ' + comm
+                    }
+
+                </Route>
+                <Route path='/users'>
+                    <Chart/>
+                </Route>
+                <Route exact path='/'>
+                    <Chart handler={handler}/>
+                </Route>
+            </Switch>
+        </Router>
     );
 };
 
